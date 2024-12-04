@@ -55,6 +55,6 @@ public class AppUser {
     @Column(nullable = false)
     private LocalDateTime updated_at;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDateTime deleted_at;
 }
