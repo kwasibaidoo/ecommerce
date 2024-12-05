@@ -1,5 +1,8 @@
 package com.ecommerce.ecommerce.services;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,6 +42,11 @@ public class AppUserService implements UserDetailsService {
                     .username(appUser.getEmail())
                     .password(appUser.getPassword())
                     .build();
+    }
+
+
+    public Optional<AppUser> userProfile(UUID id) {
+        return appUserRepository.findById(id);
     }
     
 }
