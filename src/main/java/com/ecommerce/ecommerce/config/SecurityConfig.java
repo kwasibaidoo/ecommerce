@@ -32,8 +32,8 @@ public class SecurityConfig {
                                 .requestMatchers("/login").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults());
+                .formLogin((formLogin) -> formLogin.usernameParameter("email").passwordParameter("password"))
+                .httpBasic(Customizer.withDefaults());
 
         return httpSecurity.build();
     }
@@ -42,6 +42,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(daoAuthenticationProvider);
     }
 }

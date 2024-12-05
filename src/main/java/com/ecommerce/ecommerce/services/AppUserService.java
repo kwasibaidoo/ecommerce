@@ -12,7 +12,10 @@ import com.ecommerce.ecommerce.data_transfer_objects.RegistrationDTO;
 import com.ecommerce.ecommerce.models.AppUser;
 import com.ecommerce.ecommerce.repositories.AppUserRepository;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class AppUserService implements UserDetailsService {
 
     @Autowired
@@ -35,7 +38,6 @@ public class AppUserService implements UserDetailsService {
         return User.builder()
                     .username(appUser.getEmail())
                     .password(appUser.getPassword())
-                    .roles(appUser.getRole())
                     .build();
     }
     
