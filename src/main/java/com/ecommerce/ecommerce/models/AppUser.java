@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,13 +18,16 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.UUID;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AppUser {
+public class AppUser implements UserDetails {
 
     public AppUser(String name, String email, String password, String role) {
         this.name = name;
@@ -39,6 +45,7 @@ public class AppUser {
 
     @NotNull
     @Email
+    @Column(unique = true)
     private String email;
 
     @NotNull
@@ -57,4 +64,14 @@ public class AppUser {
 
     @Column(nullable = true)
     private LocalDateTime deleted_at;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public String getUsername() {
+        return getEmail();
+    }
 }

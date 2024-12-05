@@ -1,5 +1,8 @@
 package com.ecommerce.ecommerce.data_transfer_objects;
 
+import com.ecommerce.ecommerce.utils.ConfirmPassword;
+import com.ecommerce.ecommerce.utils.UniqueEmail;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ConfirmPassword
 public class RegistrationDTO {
 
     @NotNull
@@ -18,6 +22,7 @@ public class RegistrationDTO {
 
     @NotNull
     @Email
+    @UniqueEmail(message = "Email is already taken")
     private String email;
 
     @NotNull
