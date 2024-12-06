@@ -1,6 +1,8 @@
 package com.ecommerce.ecommerce.services;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,5 +44,15 @@ public class CategoryService {
 
     public List<Category> getCategories() {
         return categoryRepository.findByDeletedAtIsNull();
+    }
+
+    public Optional<Category> getCategoryById(String id) {
+        UUID uuid = UUID.fromString(id);
+        return categoryRepository.findById(uuid);
+    }
+
+    public void deleteCategory(String id) {
+        UUID uuid = UUID.fromString(id);
+        categoryRepository.deleteById(uuid);
     }
 }
