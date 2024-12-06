@@ -11,7 +11,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "categories")
 public class Category {
 
 
@@ -35,10 +35,17 @@ public class Category {
     @Column(unique = true)
     private String name;
 
-    private UUID parent_id;
+    @ManyToOne
+    @JoinColumn(name = "parent_id", nullable = true)
+    private Category parent;
 
-    private String left;
-    private String right;
+    @ManyToOne
+    @JoinColumn(name = "left_child_id", nullable = true)
+    private Category leftPosition;
+
+    @ManyToOne
+    @JoinColumn(name = "right_child_id", nullable = true)
+    private Category rightPosition;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -49,5 +56,5 @@ public class Category {
     private LocalDateTime updated_at;
 
     @Column(nullable = true)
-    private LocalDateTime deleted_at;
+    private LocalDateTime deletedAt;
 }
