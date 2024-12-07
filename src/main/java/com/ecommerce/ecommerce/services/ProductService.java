@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,7 +66,7 @@ public class ProductService {
     public void deleteProduct(String id){
         UUID uuid = UUID.fromString(id);
         Product product = productRepository.findById(uuid).orElseThrow(() -> new ProductNotFoundException(ErrorMessages.PRODUCT_NOT_FOUND.getMessage()));
-
-        productRepository.delete(product);
+        product.setDeletedAt(LocalDateTime.now());
+        productRepository.save(product);
     }
 }

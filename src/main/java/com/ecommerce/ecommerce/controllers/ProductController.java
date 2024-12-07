@@ -1,11 +1,14 @@
 package com.ecommerce.ecommerce.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ecommerce.ecommerce.data_transfer_objects.ProductDTO;
 import com.ecommerce.ecommerce.models.Product;
 import com.ecommerce.ecommerce.services.ProductService;
+import com.ecommerce.ecommerce.utils.ValidationResponse;
 
 import jakarta.validation.Valid;
 
@@ -28,10 +32,15 @@ public class ProductController {
 
     @PostMapping("/product")
     public ResponseEntity<?> addProduct(@RequestBody @Valid ProductDTO productDTO, BindingResult bindingResult) {
+        Map<String, String> errors = new HashMap<>();
         if(bindingResult.hasErrors()) {
-            StringBuilder errors = new StringBuilder();
-            bindingResult.getAllErrors().forEach(error -> errors.append(error.getDefaultMessage()).append("\n"));
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
+            bindingResult.getAllErrors().forEach(error -> {
+                String fieldName = ((FieldError) error).getField();
+                String errorMessage = error.getDefaultMessage();
+                errors.put(fieldName, errorMessage);
+            });
+            ValidationResponse validationResponse = new ValidationResponse(errors);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationResponse);
         }
         else {
             productService.addProduct(productDTO);
@@ -53,14 +62,19 @@ public class ProductController {
 
     @PutMapping("/product/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable("id") String id,@RequestBody @Valid ProductDTO productDTO, BindingResult bindingResult) {
+        Map<String, String> errors = new HashMap<>();
         if(bindingResult.hasErrors()) {
-            StringBuilder errors = new StringBuilder();
-            bindingResult.getAllErrors().forEach(error -> errors.append(error.getDefaultMessage()).append("\n"));
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
+            bindingResult.getAllErrors().forEach(error -> {
+                String fieldName = ((FieldError) error).getField();
+                String errorMessage = error.getDefaultMessage();
+                errors.put(fieldName, errorMessage);
+            });
+            ValidationResponse validationResponse = new ValidationResponse(errors);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationResponse);
         }
-        else{
+        else {
             productService.updateProduct(id, productDTO);
-            return ResponseEntity.status(HttpStatus.OK).body("");
+            return ResponseEntity.status(HttpStatus.OK).body("Product Updated Successfully");
         }
     }
 

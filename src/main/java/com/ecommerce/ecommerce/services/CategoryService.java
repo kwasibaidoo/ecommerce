@@ -1,13 +1,15 @@
 package com.ecommerce.ecommerce.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.ecommerce.data_transfer_objects.CategoryDTO;
+import com.ecommerce.ecommerce.enums.ErrorMessages;
+import com.ecommerce.ecommerce.exceptions.CategoryNotFoundException;
 import com.ecommerce.ecommerce.models.Category;
 import com.ecommerce.ecommerce.repositories.CategoryRepository;
 
@@ -46,13 +48,37 @@ public class CategoryService {
         return categoryRepository.findByDeletedAtIsNull();
     }
 
-    public Optional<Category> getCategoryById(String id) {
+    public Category getCategoryById(String id) {
         UUID uuid = UUID.fromString(id);
-        return categoryRepository.findById(uuid);
+        return categoryRepository.findById(uuid).orElseThrow(() -> new CategoryNotFoundException(ErrorMessages.CATEGORY_NOT_FOUND.getMessage()));
     }
 
     public void deleteCategory(String id) {
         UUID uuid = UUID.fromString(id);
-        categoryRepository.deleteById(uuid);
+        Category category = categoryRepository.findById(uuid).orElseThrow(() -> new CategoryNotFoundException(ErrorMessages.CATEGORY_NOT_FOUND.getMessage()));
+        category.setDeletedAt(LocalDateTime.now());
+        categoryRepository.save(category);
+    }
+
+    public void updateCategory(String id, CategoryDTO categoryDTO) {
+        UUID uuid = UUID.fromString(id);
+        Category category = categoryRepository.findById(uuid).orElseThrow(() -> new CategoryNotFoundException(ErrorMessages.CATEGORY_NOT_FOUND.getMessage()));
+        category.setName(categoryDTO.getName());
+        if (categoryDTO.getParent_id() != null) {
+            Category parentCategory = categoryRepository.findById(categoryDTO.getParent_id()).orElse(null);
+            category.setParent(parentCategory);
+        }
+
+        if (categoryDTO.getLeft_id() != null) {
+            Category leftChild = categoryRepository.findById(categoryDTO.getLeft_id()).orElse(null);
+            category.setLeftPosition(leftChild);
+        }
+
+        if (categoryDTO.getRight_id() != null) {
+            Category rightChild = categoryRepository.findById(categoryDTO.getRight_id()).orElse(null);
+            category.setRightPosition(rightChild);
+        }
+
+        categoryRepository.save(category);
     }
 }
