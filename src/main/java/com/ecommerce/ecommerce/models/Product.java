@@ -1,7 +1,6 @@
 package com.ecommerce.ecommerce.models;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,8 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,29 +23,28 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category {
-
-
+public class Product {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @NotNull
-    @NotBlank
-    @Column(unique = true)
+    // unique
     private String name;
 
+    @NotNull
     @ManyToOne
-    @JoinColumn(name = "parent_id", nullable = true)
-    private Category parent;
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "left_child_id", nullable = true)
-    private Category leftPosition;
+    @NotNull
+    @Min(0)
+    private int quantity;
 
-    @ManyToOne
-    @JoinColumn(name = "right_child_id", nullable = true)
-    private Category rightPosition;
+    @Min(0)
+    @NotNull
+    private Double price;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -59,7 +56,4 @@ public class Category {
 
     @Column(nullable = true)
     private LocalDateTime deletedAt;
-
-    @OneToMany(mappedBy = "category", orphanRemoval = true)
-    private List<Product> products;
 }
