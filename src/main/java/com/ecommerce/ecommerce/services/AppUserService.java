@@ -1,6 +1,5 @@
 package com.ecommerce.ecommerce.services;
 
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -11,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.ecommerce.data_transfer_objects.RegistrationDTO;
+import com.ecommerce.ecommerce.enums.ErrorMessages;
+import com.ecommerce.ecommerce.exceptions.UserNotFoundException;
 import com.ecommerce.ecommerce.models.AppUser;
 import com.ecommerce.ecommerce.repositories.AppUserRepository;
 
@@ -44,8 +45,8 @@ public class AppUserService implements UserDetailsService {
     }
 
 
-    public Optional<AppUser> getUserByEmail(String email) {
-        return appUserRepository.findByEmail(email);
+    public AppUser getUserByEmail(String email) {
+        return appUserRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(ErrorMessages.USER_NOT_FOUND.getMessage()));
     }
     
 }

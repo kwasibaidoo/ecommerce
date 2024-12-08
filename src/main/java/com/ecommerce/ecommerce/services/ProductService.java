@@ -28,7 +28,7 @@ public class ProductService {
     public void addProduct(ProductDTO productDTO) {
         Product product = new Product();
         UUID uuid = UUID.fromString(productDTO.getCategory_id());
-        Category category = categoryRepository.findById(uuid).orElseThrow(() -> new CategoryNotFoundException(ErrorMessages.CATEGORY_NOT_FOUND.getMessage()));
+        Category category = categoryRepository.findByIdAndDeletedAtIsNull(uuid).orElseThrow(() -> new CategoryNotFoundException(ErrorMessages.CATEGORY_NOT_FOUND.getMessage()));
 
         product.setName(productDTO.getName());
         product.setCategory(category);
@@ -45,13 +45,13 @@ public class ProductService {
 
     public Product getProduct(String id) {
         UUID uuid = UUID.fromString(id);
-        return productRepository.findById(uuid).orElseThrow(() -> new ProductNotFoundException(ErrorMessages.PRODUCT_NOT_FOUND.getMessage()));
+        return productRepository.findByIdAndDeletedAtIsNull(uuid).orElseThrow(() -> new ProductNotFoundException(ErrorMessages.PRODUCT_NOT_FOUND.getMessage()));
     }
 
     public void updateProduct(String id, ProductDTO productDTO) {
         UUID uuid = UUID.fromString(id);
-        Product product = productRepository.findById(uuid).orElseThrow(() -> new ProductNotFoundException(ErrorMessages.PRODUCT_NOT_FOUND.getMessage()));
-        Category category = categoryRepository.findById(UUID.fromString(productDTO.getCategory_id())).orElseThrow(() -> new CategoryNotFoundException(ErrorMessages.CATEGORY_NOT_FOUND.getMessage()));
+        Product product = productRepository.findByIdAndDeletedAtIsNull(uuid).orElseThrow(() -> new ProductNotFoundException(ErrorMessages.PRODUCT_NOT_FOUND.getMessage()));
+        Category category = categoryRepository.findByIdAndDeletedAtIsNull(UUID.fromString(productDTO.getCategory_id())).orElseThrow(() -> new CategoryNotFoundException(ErrorMessages.CATEGORY_NOT_FOUND.getMessage()));
 
         product.setName(productDTO.getName());
         product.setCategory(category);

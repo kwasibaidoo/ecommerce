@@ -17,7 +17,7 @@ public class GlobalExceptions {
         ErrorResponse errorResponse = new ErrorResponse(
             new Date(System.currentTimeMillis()), 
             ex.getMessage(), 
-    "The requested category ID does not exist in the database"
+            "The requested category ID does not exist in the database"
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
@@ -27,8 +27,19 @@ public class GlobalExceptions {
         ErrorResponse errorResponse = new ErrorResponse(
             new Date(System.currentTimeMillis()), 
             ex.getMessage(), 
-    "The requested category ID does not exist in the database"
+            "The requested category ID does not exist in the database"
         );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+            new Date(System.currentTimeMillis()),
+            ex.getMessage(),
+            "The requested user ID does not exist in the database"
+        );
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 }

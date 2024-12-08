@@ -1,6 +1,7 @@
 package com.ecommerce.ecommerce.repositories;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +15,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     List<Product> findByDeletedAtIsNull();
     boolean existsByName(String name);
     List<Product> findByNameIgnoreCaseAndDeletedAtIsNull(String query);
+    Optional<Product> findByIdAndDeletedAtIsNull(UUID id);
 
 }
