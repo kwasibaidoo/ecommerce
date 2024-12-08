@@ -69,4 +69,8 @@ public class ProductService {
         product.setDeletedAt(LocalDateTime.now());
         productRepository.save(product);
     }
+
+    public List<Product> searchProduct(String query) {
+        return productRepository.findByNameIgnoreCaseAndDeletedAtIsNull(query);
+    }
 }

@@ -13,4 +13,5 @@ import java.util.UUID;
 public interface CategoryRepository extends JpaRepository<Category, UUID> {
     List<Category> findByDeletedAtIsNull();
     boolean existsByName(String name);
+    List<Category> findByNameIgnoreCaseAndDeletedAtIsNull(String query);
 }

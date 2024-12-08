@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.ecommerce.data_transfer_objects.ProductDTO;
@@ -82,5 +83,11 @@ public class ProductController {
     public ResponseEntity<?> deleteProduct(@PathVariable("id") String id) {
         productService.deleteProduct(id);
         return ResponseEntity.status(HttpStatus.OK).body("Product deleted");
+    }
+
+    @GetMapping("/product/search")
+    public ResponseEntity<List<Product>> searchProduct(@RequestParam String query) {
+        List<Product> searchResults = productService.searchProduct(query);
+        return ResponseEntity.status(HttpStatus.OK).body(searchResults);
     }
 }

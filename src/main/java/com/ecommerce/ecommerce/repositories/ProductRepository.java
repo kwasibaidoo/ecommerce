@@ -12,5 +12,7 @@ import com.ecommerce.ecommerce.models.Product;
 public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     List<Product> findByDeletedAtIsNull();
+    boolean existsByName(String name);
+    List<Product> findByNameIgnoreCaseAndDeletedAtIsNull(String query);
 
 }

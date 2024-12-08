@@ -81,4 +81,9 @@ public class CategoryService {
 
         categoryRepository.save(category);
     }
+
+
+    public List<Category> searchCategory(String query) {
+        return categoryRepository.findByNameIgnoreCaseAndDeletedAtIsNull(query);
+    }
 }

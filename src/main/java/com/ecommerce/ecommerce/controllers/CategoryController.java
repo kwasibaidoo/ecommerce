@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.ecommerce.data_transfer_objects.CategoryDTO;
@@ -84,5 +85,12 @@ public class CategoryController {
             categoryService.updateCategory(id, categoryDTO);
             return new ResponseEntity<>("Category updated successfully", HttpStatus.OK);
         }
+    }
+
+
+    @GetMapping("/category/search")
+    public ResponseEntity<List<Category>> searchCategory(@RequestParam String query) {
+        List<Category> searchResults = categoryService.searchCategory(query);
+        return ResponseEntity.status(200).body(searchResults);
     }
 }
