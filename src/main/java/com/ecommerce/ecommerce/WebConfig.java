@@ -29,8 +29,8 @@ public class WebConfig implements WebMvcConfigurer {
         if(isDevProfileActive()) {
             System.out.println("DEV PROFILE ACTIVATED");
             interceptorRegistry.addInterceptor(authenticationInterceptor)
-                .excludePathPatterns("/register","/login");
-                // .addPathPatterns("/**");
+            .addPathPatterns("/**")
+            .excludePathPatterns("/login","/register","/");
         }
     }
 
