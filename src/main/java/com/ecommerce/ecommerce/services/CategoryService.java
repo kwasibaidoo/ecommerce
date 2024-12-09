@@ -84,6 +84,6 @@ public class CategoryService {
 
 
     public List<Category> searchCategory(String query) {
-        return categoryRepository.findByNameIgnoreCaseAndDeletedAtIsNull(query);
+        return categoryRepository.findByNameContainingIgnoreCaseAndDeletedAtIsNull(query);
     }
 }

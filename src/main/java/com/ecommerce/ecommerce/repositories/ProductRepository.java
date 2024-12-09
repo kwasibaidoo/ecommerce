@@ -14,7 +14,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     List<Product> findByDeletedAtIsNull();
     boolean existsByName(String name);
-    List<Product> findByNameIgnoreCaseAndDeletedAtIsNull(String query);
+    List<Product> findByNameContainingIgnoreCaseAndDeletedAtIsNull(String query);
     Optional<Product> findByIdAndDeletedAtIsNull(UUID id);
 
 }

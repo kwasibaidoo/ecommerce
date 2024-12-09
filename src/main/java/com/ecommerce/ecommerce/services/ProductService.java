@@ -71,6 +71,6 @@ public class ProductService {
     }
 
     public List<Product> searchProduct(String query) {
-        return productRepository.findByNameIgnoreCaseAndDeletedAtIsNull(query);
+        return productRepository.findByNameContainingIgnoreCaseAndDeletedAtIsNull(query);
     }
 }
