@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ecommerce.ecommerce.models.Category;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,5 +18,6 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
     boolean existsByName(String name);
     Page<Category> findByNameContainingIgnoreCaseAndDeletedAtIsNull(String query, Pageable pageable);
     Optional<Category> findByIdAndDeletedAtIsNull(UUID id);
+    List<Category> findByDeletedAtIsNull();
     
 }
