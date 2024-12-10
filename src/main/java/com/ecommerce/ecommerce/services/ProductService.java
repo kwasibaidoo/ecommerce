@@ -43,7 +43,7 @@ public class ProductService {
     }
 
     public Page<Product> getProducts(int page, int size, String direction, String sortBy) {
-        Sort.Direction sortDirection = Sort.Direction.fromString(sortBy);
+        Sort.Direction sortDirection = Sort.Direction.fromString(direction);
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
         return productRepository.findByDeletedAtIsNull(pageable);
     }
