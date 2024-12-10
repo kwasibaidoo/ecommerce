@@ -1,10 +1,10 @@
 package com.ecommerce.ecommerce.controllers;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -50,8 +50,12 @@ public class ProductController {
     }
 
     @GetMapping("/product")
-    public ResponseEntity<List<Product>> getProducts() {
-        List<Product> products = productService.getProducts();
+    public ResponseEntity<Page<Product>> getProducts(
+        @RequestParam(defaultValue = "0", required = false) int page, 
+        @RequestParam(defaultValue = "10", required = false) int size,
+        @RequestParam(defaultValue = "asc", required = false) String direction,
+        @RequestParam(defaultValue = "name", required = false) String sortBy) {
+        Page<Product> products = productService.getProducts(page, size, direction, sortBy);
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
@@ -86,8 +90,8 @@ public class ProductController {
     }
 
     @GetMapping("/product/search")
-    public ResponseEntity<List<Product>> searchProduct(@RequestParam String query) {
-        List<Product> searchResults = productService.searchProduct(query);
+    public ResponseEntity<Page<Product>> searchProduct(@RequestParam String query, @RequestParam(defaultValue = "0", required = false) int page, @RequestParam(defaultValue = "10", required = false) int size) {
+        Page<Product> searchResults = productService.searchProduct(query, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(searchResults);
     }
 }

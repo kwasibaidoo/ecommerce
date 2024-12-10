@@ -1,10 +1,13 @@
 package com.ecommerce.ecommerce.services;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.ecommerce.data_transfer_objects.CategoryDTO;
@@ -44,8 +47,10 @@ public class CategoryService {
         
     }
 
-    public List<Category> getCategories() {
-        return categoryRepository.findByDeletedAtIsNull();
+    public Page<Category> getCategories(int page, int size, String direction, String sortBy) {
+        Sort.Direction sortDirection = Sort.Direction.fromString(direction);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+        return categoryRepository.findByDeletedAtIsNull(pageable);
     }
 
     public Category getCategoryById(String id) {
@@ -83,7 +88,8 @@ public class CategoryService {
     }
 
 
-    public List<Category> searchCategory(String query) {
-        return categoryRepository.findByNameContainingIgnoreCaseAndDeletedAtIsNull(query);
+    public Page<Category> searchCategory(String query, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return categoryRepository.findByNameContainingIgnoreCaseAndDeletedAtIsNull(query, pageable);
     }
 }

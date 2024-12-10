@@ -1,10 +1,13 @@
 package com.ecommerce.ecommerce.services;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.ecommerce.data_transfer_objects.ProductDTO;
@@ -39,8 +42,10 @@ public class ProductService {
 
     }
 
-    public List<Product> getProducts() {
-        return productRepository.findByDeletedAtIsNull();
+    public Page<Product> getProducts(int page, int size, String direction, String sortBy) {
+        Sort.Direction sortDirection = Sort.Direction.fromString(sortBy);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+        return productRepository.findByDeletedAtIsNull(pageable);
     }
 
     public Product getProduct(String id) {
@@ -70,7 +75,8 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public List<Product> searchProduct(String query) {
-        return productRepository.findByNameContainingIgnoreCaseAndDeletedAtIsNull(query);
+    public Page<Product> searchProduct(String query, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findByNameContainingIgnoreCaseAndDeletedAtIsNull(query, pageable);
     }
 }

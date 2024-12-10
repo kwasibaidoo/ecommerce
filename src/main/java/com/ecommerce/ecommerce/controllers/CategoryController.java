@@ -1,10 +1,10 @@
 package com.ecommerce.ecommerce.controllers;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -51,8 +51,12 @@ public class CategoryController {
 
 
     @GetMapping("/category")
-    public ResponseEntity<List<Category>> getCategories() {
-        List<Category> categories = categoryService.getCategories();
+    public ResponseEntity<Page<Category>> getCategories(
+        @RequestParam(defaultValue = "0", required = false) int page, 
+        @RequestParam(defaultValue = "10", required = false) int size,
+        @RequestParam(defaultValue = "asc", required = false) String direction,
+        @RequestParam(defaultValue = "name", required = false) String sortBy) {
+        Page<Category> categories = categoryService.getCategories(page, size, direction, sortBy);
         return ResponseEntity.status(200).body(categories);
     }
 
@@ -89,8 +93,8 @@ public class CategoryController {
 
 
     @GetMapping("/category/search")
-    public ResponseEntity<List<Category>> searchCategory(@RequestParam String query) {
-        List<Category> searchResults = categoryService.searchCategory(query);
+    public ResponseEntity<Page<Category>> searchCategory(@RequestParam String query, @RequestParam(defaultValue = "0", required = false) int page, @RequestParam(defaultValue = "0", required = false) int size) {
+        Page<Category> searchResults = categoryService.searchCategory(query, page, size);
         return ResponseEntity.status(200).body(searchResults);
     }
 }
